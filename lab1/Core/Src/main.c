@@ -91,6 +91,7 @@ int main(void)
   uint8_t led_index = 0;
   uint8_t direction = 1; // 1 = clockwise, 0 = counter-clockwise
   uint8_t button_pressed = 0;
+  uint8_t mode = 0;  // 0: low frequency, 1: medium frequency, 2: high frequency
 
   /* USER CODE END 2 */
 
@@ -104,7 +105,7 @@ int main(void)
       // Check button state
       if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) == GPIO_PIN_SET) {
           if (!button_pressed) {
-              direction = !direction; // Toggle direction
+              mode = (mode + 1) % 3;  // Change mode: 0 -> 1 -> 2 -> 0
               button_pressed = 1;    // Mark button as pressed
           }
       } else {
@@ -113,8 +114,26 @@ int main(void)
 
       // Toggle current LED
       HAL_GPIO_TogglePin(GPIOD, leds[led_index]);
-      HAL_Delay(500);
-      HAL_GPIO_TogglePin(GPIOD, leds[led_index]);
+
+      // Set delay based on current mode
+      uint32_t delay;
+      switch (mode) {
+          case 0:  // Low frequency (500 ms)
+              delay = 500;
+              break;
+          case 1:  // Medium frequency (250 ms)
+              delay = 250;
+              break;
+          case 2:  // High frequency (100 ms)
+              delay = 100;
+              break;
+          default:
+              delay = 500;  // Default to low frequency
+              break;
+      }
+
+      HAL_Delay(delay);  // Delay for the selected frequency
+      HAL_GPIO_TogglePin(GPIOD, leds[led_index]);  // Turn LED off
 
       // Update LED index based on direction
       if (direction) {
@@ -183,32 +202,27 @@ void SystemClock_Config(void)
 static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
-/* USER CODE BEGIN MX_GPIO_Init_1 */
-/* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
-  /*Configure GPIO pin Output Level */
+  /* Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : PA0 */
+  /* Configure GPIO pin : PA0 */
   GPIO_InitStruct.Pin = GPIO_PIN_0;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PD12 PD13 PD14 PD15 */
+  /* Configure GPIO pins : PD12 PD13 PD14 PD15 */
   GPIO_InitStruct.Pin = GPIO_PIN_12|GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
-
-/* USER CODE BEGIN MX_GPIO_Init_2 */
-/* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */
@@ -221,29 +235,23 @@ static void MX_GPIO_Init(void)
   */
 void Error_Handler(void)
 {
-  /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
   __disable_irq();
   while (1)
   {
   }
-  /* USER CODE END Error_Handler_Debug */
 }
 
 #ifdef  USE_FULL_ASSERT
 /**
   * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
+  * where the assert_param error has occurred.
   * @param  file: pointer to the source file name
   * @param  line: assert_param error line source number
   * @retval None
   */
 void assert_failed(uint8_t *file, uint32_t line)
 {
-  /* USER CODE BEGIN 6 */
-  /* User can add his own implementation to report the file name and line number,
-     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-  /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
+
 
