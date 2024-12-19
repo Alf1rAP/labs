@@ -89,6 +89,8 @@ int main(void)
 
   uint16_t leds[] = {GPIO_PIN_12, GPIO_PIN_13, GPIO_PIN_14, GPIO_PIN_15};
   uint8_t led_index = 0;
+  uint8_t direction = 1; // 1 = clockwise, 0 = counter-clockwise
+  uint8_t button_pressed = 0;
 
   /* USER CODE END 2 */
 
@@ -99,13 +101,26 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-      // Check if the button is pressed
+      // Check button state
       if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) == GPIO_PIN_SET) {
-          HAL_GPIO_TogglePin(GPIOD, leds[led_index]);
-          HAL_Delay(500);
+          if (!button_pressed) {
+              direction = !direction; // Toggle direction
+              button_pressed = 1;    // Mark button as pressed
+          }
+      } else {
+          button_pressed = 0; // Reset button state when released
+      }
 
-          HAL_GPIO_TogglePin(GPIOD, leds[led_index]);
-          led_index = (led_index + 1) % 4;
+      // Toggle current LED
+      HAL_GPIO_TogglePin(GPIOD, leds[led_index]);
+      HAL_Delay(500);
+      HAL_GPIO_TogglePin(GPIOD, leds[led_index]);
+
+      // Update LED index based on direction
+      if (direction) {
+          led_index = (led_index + 1) % 4; // Clockwise
+      } else {
+          led_index = (led_index == 0) ? 3 : led_index - 1; // Counter-clockwise
       }
   }
   /* USER CODE END 3 */
