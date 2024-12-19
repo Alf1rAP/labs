@@ -128,7 +128,7 @@ int main(void)
  8000202:	409a      	lsls	r2, r3
  8000204:	4b15      	ldr	r3, [pc, #84]	; (800025c <main+0x94>)
  8000206:	615a      	str	r2, [r3, #20]
-            for (volatile uint32_t delay = 0; delay < 500000; delay++) {}  // Задержка
+            for (volatile uint32_t delay = 0; delay < 200000; delay++) {}  // Уменьшенная задержка
  8000208:	2300      	movs	r3, #0
  800020a:	60bb      	str	r3, [r7, #8]
  800020c:	e002      	b.n	8000214 <main+0x4c>
@@ -151,7 +151,7 @@ int main(void)
  800022e:	4a0b      	ldr	r2, [pc, #44]	; (800025c <main+0x94>)
  8000230:	400b      	ands	r3, r1
  8000232:	6153      	str	r3, [r2, #20]
-            for (volatile uint32_t delay = 0; delay < 500000; delay++) {}  // Задержка
+            for (volatile uint32_t delay = 0; delay < 200000; delay++) {}  // Уменьшенная задержка
  8000234:	2300      	movs	r3, #0
  8000236:	607b      	str	r3, [r7, #4]
  8000238:	e002      	b.n	8000240 <main+0x78>
@@ -173,7 +173,7 @@ int main(void)
  8000256:	bf00      	nop
  8000258:	40023800 	.word	0x40023800
  800025c:	40020c00 	.word	0x40020c00
- 8000260:	0007a11f 	.word	0x0007a11f
+ 8000260:	00030d3f 	.word	0x00030d3f
 
 08000264 <NMI_Handler>:
 /******************************************************************************/

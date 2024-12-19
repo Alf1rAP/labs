@@ -17,9 +17,9 @@ int main(void)
         // Включаем светодиод по очереди
         for (i = 0; i < 4; i++) {
             GPIOD->ODR = (1 << (12 + i));  // Включаем светодиод
-            for (volatile uint32_t delay = 0; delay < 500000; delay++) {}  // Задержка
+            for (volatile uint32_t delay = 0; delay < 200000; delay++) {}  // Уменьшенная задержка
             GPIOD->ODR &= ~(1 << (12 + i)); // Выключаем светодиод
-            for (volatile uint32_t delay = 0; delay < 500000; delay++) {}  // Задержка
+            for (volatile uint32_t delay = 0; delay < 200000; delay++) {}  // Уменьшенная задержка
         }
     }
 }
