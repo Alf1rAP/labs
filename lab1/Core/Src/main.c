@@ -99,11 +99,14 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-      HAL_GPIO_TogglePin(GPIOD, leds[led_index]);
-      HAL_Delay(500);
+      // Check if the button is pressed
+      if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) == GPIO_PIN_SET) {
+          HAL_GPIO_TogglePin(GPIOD, leds[led_index]);
+          HAL_Delay(500);
 
-      HAL_GPIO_TogglePin(GPIOD, leds[led_index]);
-      led_index = (led_index + 1) % 4;
+          HAL_GPIO_TogglePin(GPIOD, leds[led_index]);
+          led_index = (led_index + 1) % 4;
+      }
   }
   /* USER CODE END 3 */
 }
@@ -228,3 +231,4 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
+
