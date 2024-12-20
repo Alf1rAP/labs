@@ -55,7 +55,10 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern TIM_HandleTypeDef htim2;
 extern TIM_HandleTypeDef htim3;
+extern TIM_HandleTypeDef htim4;
+extern TIM_HandleTypeDef htim5;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -199,19 +202,28 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
-  * @brief This function handles TIM3 global interrupt.
+  * @brief This function handles TIM2 global interrupt.
   */
-void TIM3_IRQHandler(void)
+void TIM2_IRQHandler(void)
 {
-  /* USER CODE BEGIN TIM3_IRQn 0 */
-
-  /* USER CODE END TIM3_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim3);
-  /* USER CODE BEGIN TIM3_IRQn 1 */
-  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12);
-  /* USER CODE END TIM3_IRQn 1 */
+    HAL_TIM_IRQHandler(&htim2);
+    HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_12); // Переключаем светодиод на PD12
 }
 
-/* USER CODE BEGIN 1 */
+void TIM3_IRQHandler(void)
+{
+    HAL_TIM_IRQHandler(&htim3);
+    HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13); // Переключаем светодиод на PD13
+}
 
-/* USER CODE END 1 */
+void TIM4_IRQHandler(void)
+{
+    HAL_TIM_IRQHandler(&htim4);
+    HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_14); // Переключаем светодиод на PD14
+}
+
+void TIM5_IRQHandler(void)
+{
+    HAL_TIM_IRQHandler(&htim5);
+    HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_15); // Переключаем светодиод на PD15
+}
