@@ -227,3 +227,6 @@ void TIM5_IRQHandler(void)
     HAL_TIM_IRQHandler(&htim5);
     HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_15); // Переключаем светодиод на PD15
 }
+/* USER CODE BEGIN 1 */
+
+/* USER CODE END 1 */
