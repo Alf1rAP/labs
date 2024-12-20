@@ -209,15 +209,26 @@ void EXTI0_IRQHandler(void)
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
 
   /* USER CODE BEGIN EXTI0_IRQn 1 */
-  if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) == GPIO_PIN_SET)
+  if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) == GPIO_PIN_SET)
   {
     HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_SET);
-    for (volatile uint32_t i = 0; i < 10000000; i++); // Добавляем "volatile" для корректности
+
+    // Эмулируем вызов "высокоприоритетного" прерывания
+    emulate_high_priority_task();
+
+    for (volatile uint32_t i = 0; i < 10000000; i++);
     HAL_GPIO_WritePin(GPIOD, GPIO_PIN_12, GPIO_PIN_RESET);
   }
-
   /* USER CODE END EXTI0_IRQn 1 */
 }
+
+void emulate_high_priority_task(void)
+{
+  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_SET); // Индикатор "высокого приоритета"
+  for (volatile uint32_t i = 0; i < 5000000; i++);    // Задержка выполнения
+  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_14, GPIO_PIN_RESET);
+}
+
 
 /* USER CODE BEGIN 1 */
 
